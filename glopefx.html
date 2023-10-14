@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* Basic CSS for styling */
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    .container {
+      margin: 20px auto;
+      width: 60%;
+      background-color: #f4f4f4;
+      padding: 20px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Pounds to Dollar Exchange Rate Calculator</h1>
+    <label for="pounds">Amount of Pounds to be Exchanged (P): </label>
+    <input type="number" id="pounds" step="0.01"><br>
+    <label for="exchangeRatePoundsToDollar">Current Rate of Exchange of Pounds to Dollar (R): </label>
+    <input type="number" id="exchangeRatePoundsToDollar" step="0.01"><br>
+    <label for="buyingRateNairaToUSDT">Current Rate of Buying USDT with Naira (X): </label>
+    <input type="number" id="buyingRateNairaToUSDT" step="0.01"><br>
+    <label for="expectedRatePoundsToNaira">Expected Rate of Exchange of Pounds to Naira (Y): </label>
+    <input type="number" id="expectedRatePoundsToNaira" step="0.01" readonly><br>
+    
+    <button onclick="calculateYAndB()">Calculate Y and B</button>
+    
+    <div id="results">
+      <h2>Results:</h2>
+      <p>Expected Rate of Exchange of Pounds to Dollar (Y): <span id="resultY"></span></p>
+      <p>New Value of Y (B) for Various Percentage Reductions in Y:</p>
+      <ul id="newValuesOfY"></ul>
+    </div>
+  </div>
+  
+  <script>
+    function calculateYAndB() {
+      // Retrieve input values
+      const P = parseFloat(document.getElementById("pounds").value);
+      const R = parseFloat(document.getElementById("exchangeRatePoundsToDollar").value);
+      const X = parseFloat(document.getElementById("buyingRateNairaToUSDT").value);
+      
+      // Calculate Y using the first formula
+      const calculatedY = R * X;
+      document.getElementById("expectedRatePoundsToNaira").value = calculatedY.toFixed(2); // Automatically input Y into the Y table
+
+      // Display Y calculated with the first formula
+      document.getElementById("resultY").textContent = calculatedY.toFixed(2);
+
+      // Calculate new value of Y (B) for various percentage reductions in Y
+      const percentageReductions = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
+      const newValuesOfYList = document.getElementById("newValuesOfY");
+      newValuesOfYList.innerHTML = "";
+
+      percentageReductions.forEach(percentage => {
+        const newB = calculatedY * (1 - percentage / 100);
+        const listItem = document.createElement("li");
+        listItem.textContent = `For a ${percentage}% reduction in Y: B = ${newB.toFixed(2)}`;
+        newValuesOfYList.appendChild(listItem);
+      });
+    }
+  </script>
+</body>
+</html>
